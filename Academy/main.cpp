@@ -51,14 +51,14 @@ public:
 	}
 };
 
-class Student:public Human
+class Student :public Human
 {
 	std::string speciality;
 	std::string group;
 	double rating;
 	double attendance;
 public:
-	const std::string& get_speciality ()const
+	const std::string& get_speciality()const
 	{
 		return speciality;
 	}
@@ -91,12 +91,37 @@ public:
 	{
 		this->attendance = attendance;
 	}
+};
+
+class Teacher :public Human
+{
+	std::string tact;
+	double creativity;
+public:
+	const std::string& get_tact()const
+	{
+		return tact;
+	}
+	double get_rating()const
+	{
+		return creativity;
+	}
+	void set_tact(const std::string& tact)
+	{
+		this->tact = tact;
+	}
+	void set_creativity(double creativity)
+	{
+		this->creativity = creativity;
+	}
+};
+
 		//						Constructor:
-	Student(
+	/*Student(
 		const std::string& last_name, const std::string& first_name, int age,
 		const std::string& speciality, const std::string& group, double rating, double attendance
-	):Human(last_name, first_name,age)
-	
+	):Human(last_name, first_name, age)
+
 	{
 		set_speciality(speciality);
 		set_group(group);
@@ -113,8 +138,31 @@ public:
 	{
 		Human::print();
 		cout << speciality << " " << group << " " << rating << " " << attendance << endl;
+	}*/
+		
+
+Teacher(
+			const std::string& last_name, const std::string& first_name, int age,
+			const std::string& speciality, const std::string& group, double rating, double attendance
+		):Human(last_name, first_name, age)
+
+		{
+			set_speciality(speciality);
+			set_group(group);
+			set_rating(rating);
+			set_attendance(attendance);
+			cout << "SConstructor:\t" << this << endl;
+		}
+
+	~Teacher()
+	{
+		cout << "Constructor Teacher:\t" << this << endl;
 	}
-};
+void print()const
+{
+	Teacher::print();
+	cout << tact << " " << creativity << " " << endl;
+}
 
 void main()
 {
@@ -122,6 +170,10 @@ void main()
 	Human human("Montana", "Antonio", 30);
 	human.print();
 
-	Student stud("Pinkman", "Jessie", 25, "Chemistry", "WW_220", 95, 98);
-	stud.print();
-}
+	//Student stud("Pinkman", "Jessie", 25, "Chemistry", "WW_220", 95, 98);
+	//stud.print();
+
+	Teacher T("dgfhfgj", "skdhjfgskgb", 50);
+	T.print();
+	
+};
