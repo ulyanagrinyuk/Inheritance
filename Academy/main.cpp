@@ -1,4 +1,6 @@
+//Inheritance
 #include<iostream>
+#include<string>
 using namespace std;
 
 class Human
@@ -20,6 +22,7 @@ public:
 	{
 		return age;
 	}
+
 	void set_last_name(const std::string& last_name)
 	{
 		this->last_name = last_name;
@@ -91,37 +94,13 @@ public:
 	{
 		this->attendance = attendance;
 	}
-};
 
-class Teacher :public Human
-{
-	std::string tact;
-	double creativity;
-public:
-	const std::string& get_tact()const
-	{
-		return tact;
-	}
-	double get_rating()const
-	{
-		return creativity;
-	}
-	void set_tact(const std::string& tact)
-	{
-		this->tact = tact;
-	}
-	void set_creativity(double creativity)
-	{
-		this->creativity = creativity;
-	}
-};
-
-		//						Constructor:
-	/*Student(
+	//								Constructors:
+	Student
+	(
 		const std::string& last_name, const std::string& first_name, int age,
 		const std::string& speciality, const std::string& group, double rating, double attendance
-	):Human(last_name, first_name, age)
-
+	) :Human(last_name, first_name, age)
 	{
 		set_speciality(speciality);
 		set_group(group);
@@ -138,31 +117,89 @@ public:
 	{
 		Human::print();
 		cout << speciality << " " << group << " " << rating << " " << attendance << endl;
-	}*/
-		
+	}
+};
 
-Teacher(
-			const std::string& last_name, const std::string& first_name, int age,
-			const std::string& speciality, const std::string& group, double rating, double attendance
-		):Human(last_name, first_name, age)
-
-		{
-			set_speciality(speciality);
-			set_group(group);
-			set_rating(rating);
-			set_attendance(attendance);
-			cout << "SConstructor:\t" << this << endl;
-		}
-
+class Teacher :public Human
+{
+	std::string tact;
+	int creativity;
+public:
+	const std::string& get_tact()const
+	{
+		return tact;
+	}
+	int get_experience()const
+	{
+		return creativity;
+	}
+	void set_tact(const std::string& tact)
+	{
+		this->tact = tact;
+	}
+	void set_creativity(int creativity)
+	{
+		this->creativity = creativity;
+	}
+	Teacher
+	(
+		const std::string& last_name, const std::string& first_name, int age,
+		const std::string& tact, int creativity
+	) :Human(last_name, first_name, age)
+	{
+		set_tact(tact);
+		set_creativity(creativity);
+		cout << "TConstructor:\t" << this << endl;
+	}
 	~Teacher()
 	{
-		cout << "Constructor Teacher:\t" << this << endl;
+		cout << "TDestructor:\t" << this << endl;
 	}
-void print()const
-{
-	Teacher::print();
-	cout << tact << " " << creativity << " " << endl;
-}
+	void print()const
+	{
+		Human::print();
+		cout << tact << " " << creativity << endl;
+	}
+};
+
+class Graduate :public Student
+{	
+	std::string subject;
+	double disciplined;
+public:	
+	const std::string& get_subject()const
+	{
+		return subject;
+	}
+	void set_subject(const std::string& subject)
+	{
+		this->subject = subject;
+	}
+	double get_disciplined()const
+	{
+		return disciplined;
+	}
+	Graduate
+	(
+		const std::string& last_name, const std::string& first_name, int age,
+		const std::string& speciality, const std::string& group, double rating, double attendance,
+		const std::string& subject
+	) :Student(last_name, first_name, age, speciality, group, rating, attendance)
+	{
+		
+		set_subject(subject);
+		cout << "GConstructor:\t" << this << endl;
+	}
+	~Graduate()
+	{
+		cout << "GDenstructor:\t" << this << endl;
+	}
+	void print()const
+	{
+		Student::print();
+		cout << subject<< endl;
+	}
+};
 
 void main()
 {
@@ -170,10 +207,12 @@ void main()
 	Human human("Montana", "Antonio", 30);
 	human.print();
 
-	//Student stud("Pinkman", "Jessie", 25, "Chemistry", "WW_220", 95, 98);
-	//stud.print();
+	Student stud("Pinkman", "Jessie", 25, "Chemistry", "WW_220", 95, 98);
+	stud.print();
 
-	Teacher T("dgfhfgj", "skdhjfgskgb", 50);
+	Teacher T("Burke", "Matilda", 49, "Literature", 30);
 	T.print();
-	
-};
+
+	Graduate G("Stretch", "Mia", 29, "Journalist", "VKR", 50, 50, "On the topic The work of John Donne");
+	G.print();
+}
