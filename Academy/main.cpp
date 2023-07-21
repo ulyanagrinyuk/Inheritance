@@ -124,15 +124,15 @@ public:
 
 	std::ostream& print(std::ostream& os)const
 	{
-		Human::print(os);
+		Human::print(os) << " ";
 		return os << speciality << " " << group << " " << rating << " " << attendance << endl;
 	}
 };
 
-//std::ostream& operator<<(std::ostream& os, const Student& obj)
-//{
-//	return os << (Human&)obj << obj.get_speciality() << " " << obj.get_group() << " " << obj.get_rating() << " " << obj.get_attendance();
-//}
+std::ostream& operator<<(std::ostream& os, const Student& obj)
+{
+	return os << (Human&)obj << obj.get_speciality() << " " << obj.get_group() << " " << obj.get_rating() << " " << obj.get_attendance();
+}
 
 class Teacher :public Human
 {
@@ -171,7 +171,7 @@ public:
 	}
 	std::ostream& print(std::ostream& os)const
 	{
-		Human::print(os);
+		Human::print(os) << " ";
 		return os << tact << " " << creativity << endl;
 	}
 };
@@ -245,13 +245,11 @@ void main()
 	{
 		/*cout << typeid(*group[i]).name() << ":\n";
 		group[i]->print();*/
-
 		/*if(typeid(*group[i]) == typeid(Student))
 		cout << *dynamic_cast<Student*>(group[i]) << endl;*/
 		cout << *group[i] << endl;
 		cout << "\n---------------------------------------------\n";
 	}
-
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete group[i];
