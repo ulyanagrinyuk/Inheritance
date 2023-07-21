@@ -1,9 +1,14 @@
 #include<iostream>
 #include<string>
+#include<fstream>
 using namespace std;
 
 class Human
 {
+	static const int LAST_NAME_WIDTH = 12;
+	static const int FIRST_NAME_WIDTH = 12;
+	static const int AGE_WIDTH = 5;
+	static int count;
 protected:
 	string last_name;
 	string first_name;
@@ -40,18 +45,30 @@ public:
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
+		count++;
 		cout << "HConstructor:\t" << this << endl;
 	}
-	~Human()
+	virtual ~Human()
 	{
+		count--;
 		cout << "HDestructor:\t" << this << endl;
 	}
 
-	virtual std::ostream& print(std::ostream& os)const
+	virtual std::ostream& print(std::ostream& ofs)const
 	{
-		return os << last_name << " " << first_name << " " << age;
+		ofs.width(LAST_NAME_WIDTH);
+		ofs << std::left;
+		ofs << last_name;
+		ofs.width(FIRST_NAME_WIDTH);
+		ofs << std::left;
+		ofs << first_name; 
+		ofs.width(AGE_WIDTH);
+		ofs << age;
+		return ofs;
 	}
 };
+
+int Human::count = 0;
 
 //std::ostream& operator<<(std::ostream& os, const Human& obj)
 //{
@@ -63,8 +80,18 @@ std::ostream& operator<<(std::ostream& os, const Human& obj)
 	return obj.print(os);
 }
 
+std::ofstream& operator<<(std::ofstream& ofs, const Human& obj)
+{
+	 obj.print(ofs);
+	 return ofs;
+}
+
 class Student :public Human
 {
+	static const int SPECIALITY_WIDTH = 22;
+	static const int GROUP_WIDTH = 7;
+	static const int RATING_WIDTH = 8;
+	static const int ATTENDANCE_WIDTH = 8;
 	std::string speciality;
 	std::string group;
 	double rating;
@@ -127,15 +154,31 @@ public:
 		Human::print(os) << " ";
 		return os << speciality << " " << group << " " << rating << " " << attendance << endl;
 	}
+	std::ofstream& preint(std::ofstream& ofs)const
+	{
+		Human::print(ofs);
+		ofs.width(SPECIALITY_WIDTH);
+		ofs << speciality;
+		ofs.width(GROUP_WIDTH);
+		ofs << group;
+		ofs.width(RATING_WIDTH);
+		ofs << rating;
+		ofs.width(ATTENDANCE_WIDTH);
+		ofs << attendance;
+		return ofs;
+
+	}
 };
 
-std::ostream& operator<<(std::ostream& os, const Student& obj)
-{
-	return os << (Human&)obj << obj.get_speciality() << " " << obj.get_group() << " " << obj.get_rating() << " " << obj.get_attendance();
-}
+//std::ostream& operator<<(std::ostream& os, const Student& obj)
+//{
+//	return os << (Human&)obj << obj.get_speciality() << " " << obj.get_group() << " " << obj.get_rating() << " " << obj.get_attendance();
+//}
 
 class Teacher :public Human
 {
+	static const int TACT_WIDTH = 22;
+	static const int CREATIVITY_WIDTH = 5;
 	std::string tact;
 	int creativity;
 public:
@@ -173,6 +216,15 @@ public:
 	{
 		Human::print(os) << " ";
 		return os << tact << " " << creativity << endl;
+	}
+	std::ofstream print(std::ofstream& ofs)const
+	{
+		Human::print(ofs);
+		ofs.width(TACT_WIDTH);
+		ofs << tact;
+		ofs.width(CREATIVITY_WIDTH);
+		ofs << creativity;
+	
 	}
 };
 
@@ -215,6 +267,32 @@ public:
 	}
 };
 
+void print(Human** group, const int n)
+{
+	cout << "\n---------------------------------------------\n";
+	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
+	{
+		/*cout << typeid(*group[i]).name() << ":\n";
+		group[i]->print();*/
+		/*if(typeid(*group[i]) == typeid(Student))
+		cout << *dynamic_cast<Student*>(group[i]) << endl;*/
+		cout << *group[i] << endl;
+		cout << "\n---------------------------------------------\n";
+
+	}
+		
+}
+void save(Human** group, const int size, const char filename[])
+{
+	std::ofstream fout(filename);
+	for (int i = 0; i < size; i++)fout << *group[i] << endl;
+	fout.close();
+	std::string command = "start notepad ";
+	command += filename;
+	system(command.c_str());
+}
+
+
 //#define INHERITANCE 
 
 void main()
@@ -235,21 +313,26 @@ void main()
 #endif // INHERITANCE 
 
 	Human* group[] =
+	/*Human** group = new Human*[5]*/
 	{
 		new Student("Pinkman", "Jessie", 25, "Chemistry", "WW_220", 95, 98),
 		new Teacher("Burke", "Matilda", 49, "Literature", 30),
 		new Graduate("Stretch", "Mia", 29, "Journalist", "VKR", 50, 50, "On the topic The work of John Donne")
 	};
-	cout << "\n---------------------------------------------\n";
-	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
-	{
-		/*cout << typeid(*group[i]).name() << ":\n";
-		group[i]->print();*/
-		/*if(typeid(*group[i]) == typeid(Student))
-		cout << *dynamic_cast<Student*>(group[i]) << endl;*/
-		cout << *group[i] << endl;
-		cout << "\n---------------------------------------------\n";
-	}
+	//cout << "\n---------------------------------------------\n";
+	//for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
+	//{
+	//	/*cout << typeid(*group[i]).name() << ":\n";
+	//	group[i]->print();*/
+	//	/*if(typeid(*group[i]) == typeid(Student))
+	//	cout << *dynamic_cast<Student*>(group[i]) << endl;*/
+	//	cout << *group[i] << endl;
+	//	cout << "\n---------------------------------------------\n";
+	//}
+
+	print(group, sizeof(group) / sizeof(group[0]));
+	save(group, sizeof(group) / sizeof(group[0]), "group.txt");
+
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete group[i];
