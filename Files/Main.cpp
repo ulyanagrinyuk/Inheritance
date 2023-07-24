@@ -85,6 +85,7 @@ void main()
 		std::cerr << "Error file not found" << endl;
 	}
 	fout_wol.close();
+	fout_dhcpd.close();
 	system("notepad 201 ready.txt");
 	system("notepad 201dhcpd.txt");
 }
