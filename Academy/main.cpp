@@ -166,7 +166,6 @@ public:
 		ofs.width(ATTENDANCE_WIDTH);
 		ofs << attendance;
 		return ofs;
-
 	}
 };
 
@@ -224,12 +223,13 @@ public:
 		ofs << tact;
 		ofs.width(CREATIVITY_WIDTH);
 		ofs << creativity;
-	
+
 	}
 };
 
 class Graduate :public Student
 {
+	
 	std::string subject;
 	double disciplined;
 public:
@@ -264,6 +264,12 @@ public:
 	{
 		Student::print(os);
 		return os << subject << endl;
+	}
+	std::ofstream& print(std::ofstream& os)const
+	{
+		/*Student::print(ofs);
+		ofs << subject;
+		return ofs;*/
 	}
 };
 
