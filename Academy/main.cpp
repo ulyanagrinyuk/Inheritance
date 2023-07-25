@@ -56,6 +56,7 @@ public:
 
 	virtual std::ostream& print(std::ostream& ofs)const
 	{
+		ofs << typeid(*this).name() << ":\t";
 		ofs.width(LAST_NAME_WIDTH);
 		ofs << std::left;
 		ofs << last_name;
@@ -65,6 +66,11 @@ public:
 		ofs.width(AGE_WIDTH);
 		ofs << age;
 		return ofs;
+	}
+	virtual std::ifstream& scan(std::ifstream& ifs)
+	{
+		ifs >> last_name >> first_name >> age;
+		return ifs;
 	}
 };
 
@@ -84,6 +90,12 @@ std::ofstream& operator<<(std::ofstream& ofs, const Human& obj)
 {
 	 obj.print(ofs);
 	 return ofs;
+}
+
+std::ifstream& operator>>(std::ifstream& ifs, Human& obj)
+{
+	obj.scan(ifs);
+	return ifs;
 }
 
 class Student :public Human
@@ -167,6 +179,15 @@ public:
 		ofs << attendance;
 		return ofs;
 	}
+	std::ifstream& scan(std::ifstream& ifs)
+	{
+		Human::scan(ifs);
+		char sz_speciality[SPECIALITY_WIDTH + 1] = {};
+		ifs.read(sz_speciality, SPECIALITY_WIDTH);
+		this->speciality = sz_speciality;
+		ifs >> group >> rating >> attendance;
+		return ifs;
+	}
 };
 
 //std::ostream& operator<<(std::ostream& os, const Student& obj)
@@ -223,9 +244,18 @@ public:
 		ofs << tact;
 		ofs.width(CREATIVITY_WIDTH);
 		ofs << creativity;
-
+	}
+	std::ifstream& scan(std::ifstream& ifs)
+	{
+		Human::scan(ifs);
+		char sz_tact[TACT_WIDTH + 1] = {};
+		ifs.read(sz_tact, TACT_WIDTH);
+		this->tact = sz_tact;
+		ifs >> creativity;
+		return ifs;
 	}
 };
+
 
 class Graduate :public Student
 {
@@ -265,11 +295,17 @@ public:
 		Student::print(os);
 		return os << subject << endl;
 	}
-	std::ofstream& print(std::ofstream& os)const
+	std::ofstream& print(std::ofstream& ofs)const
 	{
-		/*Student::print(ofs);
+		Student::print(ofs);
 		ofs << subject;
-		return ofs;*/
+		return ofs;
+	}
+	std::ifstream& scan(std::ifstream& ifs)
+	{
+		Student::scan(ifs);
+		std::getline(ifs, subject);
+		return ifs;
 	}
 };
 
@@ -297,9 +333,49 @@ void save(Human** group, const int size, const char filename[])
 	command += filename;
 	system(command.c_str());
 }
+Human* HumanFactory(const std::string& type)
+{
+	if (type.find("Teacher") != std::string::npos)return new Teacher("", "", 0, "", 0);
+	if (type.find("Student") != std::string::npos)return new Student("", "", 0, "", "", 0, 0);
+	if (type.find("Graduate") != std::string::npos)return new Graduate("", "", 0, "", "",0, 0, "");
+
+}
+Human** load(const std::string& filename, int& n)
+{
+	Human** group = nullptr;
+	std::ifstream fin(filename);
+	if (fin.is_open())
+	{
+		for (n = 0; !fin.eof(); n++)
+		{
+			std::string buffer;
+			std::getline(fin, buffer);
+		}
+		fin.close();
+		group = new Human * [--n] {};
+		fin.clear();
+		fin.seekg(0);
+		for (int i = 0; !fin.eof(); i++)
+		{
+			std::string type;
+			std::getline(fin, type, ':');
+			fin.ignore();
+			group[i] = HumanFactory(type);
+			group[i] = HumanFactory(type);
+			fin >> *group[i];
+		}
+		fin.close();
+	}
+	else
+	{
+		std::cerr << "Error: file not found" << endl;
+	}
+	return group;
+}
 
 
 //#define INHERITANCE 
+//#define STORE_TO_FILE
 
 void main()
 {
@@ -317,7 +393,7 @@ void main()
 	Graduate G("Stretch", "Mia", 29, "Journalist", "VKR", 50, 50, "On the topic The work of John Donne");
 	G.print();
 #endif // INHERITANCE 
-
+#ifdef STORE_TO_FILE
 	Human* group[] =
 	/*Human** group = new Human*[5]*/
 	{
@@ -335,10 +411,13 @@ void main()
 	//	cout << *group[i] << endl;
 	//	cout << "\n---------------------------------------------\n";
 	//}
-
 	print(group, sizeof(group) / sizeof(group[0]));
 	save(group, sizeof(group) / sizeof(group[0]), "group.txt");
+#endif // STORE_TO_FILE
 
+	int n = 0;
+	Human** group = load("group.txt", n);	
+	print(group, n);
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete group[i];

@@ -66,6 +66,10 @@ void main()
 		{
 			fin >> sz_ip_buffer >> sz_mac_buffer;
 			if (strlen(sz_ip_buffer) == 0)continue;
+			for (int i = 0; sz_mac_buffer[i]; i++)
+				if(sz_mac_buffer[i] == '-')
+					sz_mac_buffer[i] == ':';
+
 			cout << "host-" << i + 1 << endl;
 			cout << "{\n";
 			cout << "\thardware-ethernet:" << sz_mac_buffer << ";\n";
@@ -86,6 +90,6 @@ void main()
 	}
 	fout_wol.close();
 	fout_dhcpd.close();
-	system("notepad 201 ready.txt");
-	system("notepad 201dhcpd.txt");
+	system("start notepad 201 ready.txt");
+	system("start notepad 201dhcpd.txt");
 }
