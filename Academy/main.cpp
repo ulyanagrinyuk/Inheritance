@@ -412,6 +412,7 @@ void main()
 	//	cout << "\n---------------------------------------------\n";
 	//}
 	print(group, sizeof(group) / sizeof(group[0]));
+	
 	save(group, sizeof(group) / sizeof(group[0]), "group.txt");
 #endif // STORE_TO_FILE
 
