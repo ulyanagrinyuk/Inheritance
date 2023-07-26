@@ -416,10 +416,11 @@ void main()
 #endif // STORE_TO_FILE
 
 	int n = 0;
-	Human** group = load("group.txt", n);	
+	Human** group = load("group.txt", n);		
 	print(group, n);
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete group[i];
 	}
+	
 }
