@@ -1,15 +1,16 @@
-#include<iostream>
+﻿#include<iostream>
 #include<string>
 #include<fstream>
 using namespace std;
 
 class Human
 {
+protected:
 	static const int LAST_NAME_WIDTH = 12;
 	static const int FIRST_NAME_WIDTH = 12;
 	static const int AGE_WIDTH = 5;
 	static int count;
-protected:
+private:
 	string last_name;
 	string first_name;
 	int age;
@@ -54,7 +55,19 @@ public:
 		cout << "HDestructor:\t" << this << endl;
 	}
 
-	virtual std::ostream& print(std::ostream& ofs)const
+	virtual std::ostream& print(std::ostream& os)const
+	{
+		//return os << last_name << " " << first_name << " " << age;
+		os.width(LAST_NAME_WIDTH);
+		os << std::left;
+		os << last_name;
+		os.width(FIRST_NAME_WIDTH);
+		os << first_name;
+		os.width(AGE_WIDTH);
+		os << age;
+		return os;
+	}
+	virtual std::ofstream& print(std::ofstream& ofs)const
 	{
 		ofs << typeid(*this).name() << ":\t";
 		ofs.width(LAST_NAME_WIDTH);
@@ -62,7 +75,7 @@ public:
 		ofs << last_name;
 		ofs.width(FIRST_NAME_WIDTH);
 		ofs << std::left;
-		ofs << first_name; 
+		ofs << first_name;
 		ofs.width(AGE_WIDTH);
 		ofs << age;
 		return ofs;
@@ -85,13 +98,11 @@ std::ostream& operator<<(std::ostream& os, const Human& obj)
 {
 	return obj.print(os);
 }
-
 std::ofstream& operator<<(std::ofstream& ofs, const Human& obj)
 {
-	 obj.print(ofs);
-	 return ofs;
+	obj.print(ofs);
+	return ofs;
 }
-
 std::ifstream& operator>>(std::ifstream& ifs, Human& obj)
 {
 	obj.scan(ifs);
@@ -189,7 +200,6 @@ public:
 		return ifs;
 	}
 };
-
 //std::ostream& operator<<(std::ostream& os, const Student& obj)
 //{
 //	return os << (Human&)obj << obj.get_speciality() << " " << obj.get_group() << " " << obj.get_rating() << " " << obj.get_attendance();
@@ -237,13 +247,14 @@ public:
 		Human::print(os) << " ";
 		return os << tact << " " << creativity << endl;
 	}
-	std::ofstream print(std::ofstream& ofs)const
+	std::ofstream& print(std::ofstream& ofs)const
 	{
 		Human::print(ofs);
 		ofs.width(TACT_WIDTH);
 		ofs << tact;
 		ofs.width(CREATIVITY_WIDTH);
 		ofs << creativity;
+		return ofs;
 	}
 	std::ifstream& scan(std::ifstream& ifs)
 	{
@@ -256,10 +267,9 @@ public:
 	}
 };
 
-
 class Graduate :public Student
 {
-	
+
 	std::string subject;
 	double disciplined;
 public:
@@ -312,17 +322,19 @@ public:
 void print(Human** group, const int n)
 {
 	cout << "\n---------------------------------------------\n";
-	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
+	for (int i = 0; i < n; i++)
 	{
 		/*cout << typeid(*group[i]).name() << ":\n";
 		group[i]->print();*/
 		/*if(typeid(*group[i]) == typeid(Student))
 		cout << *dynamic_cast<Student*>(group[i]) << endl;*/
-		cout << *group[i] << endl;
+		if (group[i] == nullptr)continue;
+		if (group[i])cout << *group[i] << endl;
+		/*cout << *group[i] << endl;*/
 		cout << "\n---------------------------------------------\n";
 
 	}
-		
+
 }
 void save(Human** group, const int size, const char filename[])
 {
@@ -337,8 +349,8 @@ Human* HumanFactory(const std::string& type)
 {
 	if (type.find("Teacher") != std::string::npos)return new Teacher("", "", 0, "", 0);
 	if (type.find("Student") != std::string::npos)return new Student("", "", 0, "", "", 0, 0);
-	if (type.find("Graduate") != std::string::npos)return new Graduate("", "", 0, "", "",0, 0, "");
-
+	if (type.find("Graduate") != std::string::npos)return new Graduate("", "", 0, "", "", 0, 0, "");
+	return nullptr;
 }
 Human** load(const std::string& filename, int& n)
 {
@@ -346,23 +358,25 @@ Human** load(const std::string& filename, int& n)
 	std::ifstream fin(filename);
 	if (fin.is_open())
 	{
+		//1) Îïðåäåëÿåì ðàçìåð ìàññèâà:
 		for (n = 0; !fin.eof(); n++)
 		{
 			std::string buffer;
 			std::getline(fin, buffer);
 		}
-		fin.close();
+		//2) Âûäåëÿåì ïàìÿòü ïîä ìàññèâ:
 		group = new Human * [--n] {};
+		//3) Âîçâðàùàåìñÿ â íà÷àëî ôàéëà:
 		fin.clear();
 		fin.seekg(0);
-		for (int i = 0; !fin.eof(); i++)
+		//4) Ñîçäàåì è ÷èòàåì îáúåêòû:
+		for (int i = 0; i < n; i++)
 		{
 			std::string type;
 			std::getline(fin, type, ':');
 			fin.ignore();
 			group[i] = HumanFactory(type);
-			group[i] = HumanFactory(type);
-			fin >> *group[i];
+			if (group[i])fin >> *group[i];
 		}
 		fin.close();
 	}
@@ -374,13 +388,14 @@ Human** load(const std::string& filename, int& n)
 }
 
 
-//#define INHERITANCE 
+//#define INHERITANCE
 //#define STORE_TO_FILE
+#define READ_FROM_FILE
 
 void main()
 {
 	setlocale(LC_ALL, "");
-#ifdef INHERITANCE 
+#ifdef INHERITANCE
 	Human human("Montana", "Antonio", 30);
 	human.print();
 
@@ -392,36 +407,43 @@ void main()
 
 	Graduate G("Stretch", "Mia", 29, "Journalist", "VKR", 50, 50, "On the topic The work of John Donne");
 	G.print();
-#endif // INHERITANCE 
+#endif // INHERITANCE
 #ifdef STORE_TO_FILE
+
+	Human* tomas = new Student("Vercetty", "Tommi", 30, "Theft", "Vice", 95, 98);
+	tomas->print(cout);
+
+	Human* diaz = new Teacher("Disz", "Ricardo", 55, "Weapons distribution", 25);
 	Human* group[] =
-	/*Human** group = new Human*[5]*/
 	{
+		//Upcast
 		new Student("Pinkman", "Jessie", 25, "Chemistry", "WW_220", 95, 98),
 		new Teacher("Burke", "Matilda", 49, "Literature", 30),
 		new Graduate("Stretch", "Mia", 29, "Journalist", "VKR", 50, 50, "On the topic The work of John Donne")
 	};
-	//cout << "\n---------------------------------------------\n";
+
+	//cout << "\n------------------------------------\n";
 	//for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	//{
 	//	/*cout << typeid(*group[i]).name() << ":\n";
 	//	group[i]->print();*/
-	//	/*if(typeid(*group[i]) == typeid(Student))
-	//	cout << *dynamic_cast<Student*>(group[i]) << endl;*/
+	//	//if(typeid(*group[i]) == typeid(Student))
+	//	//cout << *dynamic_cast<Student*>(group[i]) << endl;//Downcast
 	//	cout << *group[i] << endl;
-	//	cout << "\n---------------------------------------------\n";
+	//	cout << "\n------------------------------------\n";
 	//}
+
 	print(group, sizeof(group) / sizeof(group[0]));
-	
 	save(group, sizeof(group) / sizeof(group[0]), "group.txt");
 #endif // STORE_TO_FILE
-
+#ifdef READ_FROM_FILE	
 	int n = 0;
-	Human** group = load("group.txt", n);		
+	Human** group = load("group.txt", n);
 	print(group, n);
+#endif // READ_FROM_FILE	
+	
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete group[i];
 	}
-	
 }
