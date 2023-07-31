@@ -81,50 +81,51 @@ namespace Geometry
 			draw();
 		}
 	};
-	/*class Square :public Shape
-	{
-		static const int MIN_SIDE = 2;
-		static const int MAX_SIDE = 50;
-		double side;
-	public:
-		Square(double side, Color color) :Shape(color)
-		{
-			set_side(side);
-		}
-		~Square() {}
-		double get_side()const
-		{
-			return side;
-		}
-		void set_side(double side)
-		{
-			if (side < MIN_SIDE)side = MIN_SIDE;
-			if (side > MAX_SIDE)side = MAX_SIDE;
-			this->side = side;
-		}
-		double get_area()const override
-		{
-			return side * side;
-		}
-		double get_perimeter()const override
-		{
-			return side * 4;
-		}
-		void draw()const override
-		{
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetConsoleTextAttribute(hConsole, color);
-			for (int i = 0; i < side; i++)
-			{
-				for (int j = 0; j < side; j++)
-				{
-					cout << "* ";
-				}
-				cout << endl;
-			}
-			SetConsoleTextAttribute(hConsole, Color::console_default);
-		}
-	};*/
+
+	//*class Square :public Shape
+	//{
+	//	static const int MIN_SIDE = 2;
+	//	static const int MAX_SIDE = 50;
+	//	double side;
+	//public:
+	//	Square(double side, Color color) :Shape(color)
+	//	{
+	//		set_side(side);
+	//	}
+	//	~Square() {}
+	//	double get_side()const
+	//	{
+	//		return side;
+	//	}
+	//	void set_side(double side)
+	//	{
+	//		if (side < MIN_SIDE)side = MIN_SIDE;
+	//		if (side > MAX_SIDE)side = MAX_SIDE;
+	//		this->side = side;
+	//	}
+	//	double get_area()const override
+	//	{
+	//		return side * side;
+	//	}
+	//	double get_perimeter()const override
+	//	{
+	//		return side * 4;
+	//	}
+	//	void draw()const override
+	//	{
+	//		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	//		SetConsoleTextAttribute(hConsole, color);
+	//		for (int i = 0; i < side; i++)
+	//		{
+	//			for (int j = 0; j < side; j++)
+	//			{
+	//				cout << "* ";
+	//			}
+	//			cout << endl;
+	//		}
+	//		SetConsoleTextAttribute(hConsole, Color::console_default);
+	//	}
+	//};*/
 	class Rectangle :public Shape
 	{
 		static const int MIN_SIDE = 20;
@@ -195,6 +196,90 @@ namespace Geometry
 		Square(double side, SHAPE_TAKE_PARAMETERS) :Rectangle(side, side, SHAPE_GIVE_PARAMETERS) {}
 		~Square() {}
 	};
+
+	/*class Treganal :public Shape
+	{
+		static const int MIN_SIDE = 20;
+		static const int MAX_SIDE = 400;
+		double side_w;
+		double side_s;
+		double side_d;
+	public:
+		Treganal(double side_w, double side_s,double side_d, SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS)
+		{
+			set_side_w(side_w);
+			set_side_s(side_s);
+			set_side_d(side_d);
+		}
+		~Treganal() {}
+		double get_side_w()const
+		{
+			return side_w;
+		}
+		double get_side_s()const
+		{
+			return side_s;
+		}
+		double get_side_d()const
+		{
+			return side_d;
+		}
+		void set_side_w(double side_w)
+		{
+			if (side_w < MIN_SIDE)side_w = MIN_SIDE;
+			if (side_w > MAX_SIDE)side_w = MAX_SIDE;
+			this->side_w = side_w;
+		}
+		void set_side_s(double side_s)
+		{
+			if (side_s < MIN_SIDE)side_s = MIN_SIDE;
+			if (side_s > MAX_SIDE)side_s = MAX_SIDE;
+			this->side_s = side_s;
+		}
+		void set_side_d(double side_d)
+		{
+			if (side_d < MIN_SIDE)side_d = MIN_SIDE;
+			if (side_d > MAX_SIDE)side_d = MAX_SIDE;
+			this->side_d = side_d;
+		}		
+		double get_area()const
+		{
+			return side_w * side_s / 2;
+		}
+		double get_perimeter()const
+		{
+			return side_w + side_s + side_d;
+		}
+		void draw()const
+		{
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, 5, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);*/
+
+			/*::Treganal(hdc, start_x, start_y, start_x * side_w, start_y * side_s * side_d);*/
+
+	//		DeleteObject(hPen);
+	//		DeleteObject(hBrush);
+	//		DeleteObject(hwnd);
+	//	}
+	//	void info()const override
+	//	{
+	//		cout << typeid(*this).name() << endl;
+	//		cout << "Сторона w" << side_w << endl;
+	//		cout << "Сторона s" << side_s << endl;
+	//		cout << "Сторона d" << side_d << endl;
+	//		Shape::info();
+	//	}
+	//};
+	//class Square :public Treganal
+	//{
+	//public:
+	//	Square(double side, SHAPE_TAKE_PARAMETERS) :Treganal(side, side, side, SHAPE_GIVE_PARAMETERS) {}
+	//	~Square() {}
+	//};
 }
 void main()
 {
@@ -206,4 +291,8 @@ void main()
 	Geometry::Rectangle rect(300, 150, 300, 300, 5, Geometry::Color::blue);
 	rect.info();
 	cout << typeid(typeid(rect)).name() << endl;
+	
+	/*Geometry::Treganal treg(400, 150, 400, 400, 5,100, Geometry::Color::green);
+	treg.info();
+	cout << typeid(typeid(treg)).name() << endl;*/
 }
