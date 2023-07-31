@@ -1,8 +1,6 @@
 ﻿#include<iostream>
 #include<Windows.h>
-using std::cout;
-using std::cin;
-using std::endl;
+using namespace std;
 
 namespace Geometry
 {
@@ -13,7 +11,7 @@ namespace Geometry
 		blue = 0x00FF0000,
 		yellow = 0x0000FFFF,
 
-	 	console_red = 0xCC,
+		console_red = 0xCC,
 		console_green = 0xAA,
 		console_blue = 0x99,
 		console_default = 0x77
@@ -195,7 +193,7 @@ namespace Geometry
 	{
 	public:
 		Square(double side, SHAPE_TAKE_PARAMETERS) :Rectangle(side, side, SHAPE_GIVE_PARAMETERS) {}
-		~Square(){}
+		~Square() {}
 	};
 }
 void main()
