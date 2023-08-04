@@ -16,6 +16,7 @@ namespace Geometry
 		console_blue = 0x99,
 		console_default = 0x77
 	};
+
 #define SHAPE_TAKE_PARAMETERS int start_x, int start_y, int line_width, Color color
 #define SHAPE_GIVE_PARAMETERS start_x, start_y, line_width, color
 
@@ -126,6 +127,7 @@ namespace Geometry
 	//		SetConsoleTextAttribute(hConsole, Color::console_default);
 	//	}
 	//};*/
+
 	class Rectangle :public Shape
 	{
 		static const int MIN_SIDE = 20;
@@ -196,91 +198,119 @@ namespace Geometry
 		Square(double side, SHAPE_TAKE_PARAMETERS) :Rectangle(side, side, SHAPE_GIVE_PARAMETERS) {}
 		~Square() {}
 	};
+}
 
-	/*class Treganal :public Shape
+	/*class Triangle :public Shape
 	{
-		static const int MIN_SIDE = 20;
-		static const int MAX_SIDE = 400;
 		double side_w;
-		double side_s;
-		double side_d;
 	public:
-		Treganal(double side_w, double side_s,double side_d, SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS)
+		Triangle(double side_w, SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS)
 		{
 			set_side_w(side_w);
-			set_side_s(side_s);
-			set_side_d(side_d);
 		}
-		~Treganal() {}
+		~Triangle() {}
 		double get_side_w()const
 		{
 			return side_w;
 		}
-		double get_side_s()const
+		double set_side_w()const
 		{
-			return side_s;
+			return side_w;
 		}
-		double get_side_d()const
+		void set_side_w(double side_d)
 		{
-			return side_d;
-		}
-		void set_side_w(double side_w)
-		{
-			if (side_w < MIN_SIDE)side_w = MIN_SIDE;
-			if (side_w > MAX_SIDE)side_w = MAX_SIDE;
+			if (side_w < 50)side_w = 50;
+			if (side_w > 100)side_w = 100;
 			this->side_w = side_w;
 		}
-		void set_side_s(double side_s)
+		double get_height()const
 		{
-			if (side_s < MIN_SIDE)side_s = MIN_SIDE;
-			if (side_s > MAX_SIDE)side_s = MAX_SIDE;
-			this->side_s = side_s;
+			return sqrt(pow(side_w, 2) - pow(side_w / 2, 2));
 		}
-		void set_side_d(double side_d)
-		{
-			if (side_d < MIN_SIDE)side_d = MIN_SIDE;
-			if (side_d > MAX_SIDE)side_d = MAX_SIDE;
-			this->side_d = side_d;
-		}		
 		double get_area()const
 		{
-			return side_w * side_s / 2;
+			return side_w * get_side_w() / 2;
 		}
 		double get_perimeter()const
 		{
-			return side_w + side_s + side_d;
+			return side_w * 3;
 		}
 		void draw()const
 		{
 			HWND hwnd = GetConsoleWindow();
 			HDC hdc = GetDC(hwnd);
-			HPEN hPen = CreatePen(PS_SOLID, 5, color);
+			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
 			HBRUSH hBrush = CreateSolidBrush(color);
+
 			SelectObject(hdc, hPen);
-			SelectObject(hdc, hBrush);*/
+			SelectObject(hdc, hBrush);
 
-			/*::Treganal(hdc, start_x, start_y, start_x * side_w, start_y * side_s * side_d);*/
 
-	//		DeleteObject(hPen);
-	//		DeleteObject(hBrush);
-	//		DeleteObject(hwnd);
-	//	}
-	//	void info()const override
-	//	{
-	//		cout << typeid(*this).name() << endl;
-	//		cout << "Сторона w" << side_w << endl;
-	//		cout << "Сторона s" << side_s << endl;
-	//		cout << "Сторона d" << side_d << endl;
-	//		Shape::info();
-	//	}
-	//};
-	//class Square :public Treganal
-	//{
-	//public:
-	//	Square(double side, SHAPE_TAKE_PARAMETERS) :Treganal(side, side, side, SHAPE_GIVE_PARAMETERS) {}
-	//	~Square() {}
-	//};
-}
+				::Ellipse(hdc, start_x, start_y, start_x + 2 / side_w, start_y + 2 );
+
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+
+			ReleaseDC(hwnd, hdc);
+		}
+	};
+}*/
+
+//	class Circle :public Shape
+//	{
+//		double radius;
+//
+//	public:
+//
+//		Circle(double radius, SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS)
+//		{
+//			set_radius(radius);
+//		}
+//		~Circle() {}
+//		double get_radius()const
+//		{
+//			return radius;
+//		}
+//		double set_radius()const
+//		{
+//			return radius;
+//		}
+//		void set_radius(double radius)
+//		{
+//			if (radius < 50)radius = 50;
+//			if (radius > 200)radius = 200;
+//			this->radius = radius;
+//		}
+//		double get_area()const override
+//		{
+//			return radius * radius * radius;
+//		}
+//		double get_perimeter()const override
+//		{
+//			return 2 * radius * radius;
+//		}
+//		void draw()const override
+//		{
+//			HWND hwnd = GetConsoleWindow();
+//			HDC hdc = GetDC(hwnd);
+//
+//			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
+//			HBRUSH hBrush = CreateSolidBrush(color);
+//
+//			SelectObject(hdc, hPen);
+//			SelectObject(hdc, hBrush);
+//
+//			::Ellipse(hdc, start_x, start_y, start_x + 2 * radius, start_y + 2 * radius);
+//
+//			DeleteObject(hPen);
+//			DeleteObject(hBrush);
+//
+//			ReleaseDC(hwnd, hdc);
+//		}
+//	};
+//}
+
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -292,7 +322,12 @@ void main()
 	rect.info();
 	cout << typeid(typeid(rect)).name() << endl;
 	
-	/*Geometry::Treganal treg(400, 150, 400, 400, 5,100, Geometry::Color::green);
+	/*Geometry::Triangle treg(400, 150, 400, 5, Geometry::Color::green);
 	treg.info();
 	cout << typeid(typeid(treg)).name() << endl;*/
+
+	//Geometry::Circle cir(300, 60, 300,60, Geometry::Color::yellow);
+	//cir.info();
+	//cout << typeid(typeid(cir)).name() << endl; 
+
 }
