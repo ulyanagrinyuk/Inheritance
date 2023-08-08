@@ -339,11 +339,11 @@ namespace Geometry
 		}
 		double get_area()const override
 		{
-			return radius * radius * radius;
+			return radius * radius * 3.14;
 		}
 		double get_perimeter()const override
 		{
-			return 2 * radius * radius;
+			return 2 * 3.14 * radius;
 		}
 		void draw()const override
 		{
