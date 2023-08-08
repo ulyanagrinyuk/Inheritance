@@ -128,7 +128,7 @@ namespace Geometry
 	//	}
 	//};*/
 
-	class Rectangle :public Shape
+	/*class Rectangle :public Shape
 	{
 		static const int MIN_SIDE = 20;
 		static const int MAX_SIDE = 500;
@@ -198,7 +198,7 @@ namespace Geometry
 		Square(double side, SHAPE_TAKE_PARAMETERS) :Rectangle(side, side, SHAPE_GIVE_PARAMETERS) {}
 		~Square() {}
 	};
-}
+}*/
 
 	/*class Triangle :public Shape
 	{
@@ -256,78 +256,136 @@ namespace Geometry
 	};
 }*/
 
-//	class Circle :public Shape
+	class Circle :public Shape
+	{
+		double radius;
+
+	public:
+
+		Circle(double radius, SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS)
+		{
+			set_radius(radius);
+		}
+		~Circle() {}
+		double get_radius()const
+		{
+			return radius;
+		}
+		double set_radius()const
+		{
+			return radius;
+		}
+		void set_radius(double radius)
+		{
+			if (radius < 50)radius = 50;
+			if (radius > 200)radius = 200;
+			this->radius = radius;
+		}
+		double get_area()const override
+		{
+			return radius * radius * radius;
+		}
+		double get_perimeter()const override
+		{
+			return 2 * radius * radius;
+		}
+		void draw()const override
+		{
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+
+			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+
+			::Ellipse(hdc, start_x, start_y, start_x + 2 * radius, start_y + 2 * radius);
+
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+
+			ReleaseDC(hwnd, hdc);
+		}
+	};
+}
+
+//class Isosceles :public Shape
+//{
+//	double median;
+//	double bisector;
+//public:
+//	double get_median()
 //	{
-//		double radius;
+//		return median;
+//	}
+//	double get_bisector()
+//	{
+//		return bisector;
+//	}
+//	void set_median()
+//	{
+//		if (median < 100)median = 100;
+//		if (median > 120)median = 120;
+//		this->median = median;
+//	}
+//	void set_median()
+//	{
+//		if (bisector < 100)bisector = 100;
+//		if (bisector > 120)bisector = 120;
+//		this->bisector = bisector;
+//	}
+//	double get_height()const
+//	{
+//		return sqrt(pow(median, 2) - pow(bisector / 2, 2));
+//	}
+//	double get_area()const
+//	{
+//		return median * bisector / 2;
+//	}
+//	double get_perimeter()const
+//	{
+//		return median * 2 + bisector;
+//	}
+//	void draw()const
+//	{
+//		HWND hwnd = GetConsoleWindow();
+//		HDC hdc = GetDC(hwnd);
+//		HPEN hPen = CreatePen(PS_SOLID, line_width, color);
+//		HBRUSH hBrush = CreateSolidBrush(color);
 //
-//	public:
+//		SelectObject(hdc, hPen);
+//		SelectObject(hdc, hBrush);
 //
-//		Circle(double radius, SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS)
-//		{
-//			set_radius(radius);
-//		}
-//		~Circle() {}
-//		double get_radius()const
-//		{
-//			return radius;
-//		}
-//		double set_radius()const
-//		{
-//			return radius;
-//		}
-//		void set_radius(double radius)
-//		{
-//			if (radius < 50)radius = 50;
-//			if (radius > 200)radius = 200;
-//			this->radius = radius;
-//		}
-//		double get_area()const override
-//		{
-//			return radius * radius * radius;
-//		}
-//		double get_perimeter()const override
-//		{
-//			return 2 * radius * radius;
-//		}
-//		void draw()const override
-//		{
-//			HWND hwnd = GetConsoleWindow();
-//			HDC hdc = GetDC(hwnd);
 //
-//			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
-//			HBRUSH hBrush = CreateSolidBrush(color);
+//		::Polygon(hdc, start_x, start_y, start_x + 2 / median, start_y + 2);
 //
-//			SelectObject(hdc, hPen);
-//			SelectObject(hdc, hBrush);
+//		DeleteObject(hPen);
+//		DeleteObject(hBrush);
 //
-//			::Ellipse(hdc, start_x, start_y, start_x + 2 * radius, start_y + 2 * radius);
-//
-//			DeleteObject(hPen);
-//			DeleteObject(hBrush);
-//
-//			ReleaseDC(hwnd, hdc);
-//		}
-//	};
-//}
+//		ReleaseDC(hwnd, hdc);
+//	}
 
 
-void main()
+	void main()
 {
-	setlocale(LC_ALL, "");
-	//Shape shape(Color::console_blue);
-	Geometry::Square square(50, 300, 100, 5, Geometry::Color::console_red);
-	square.info();
+		setlocale(LC_ALL, "");
+		//Shape shape(Color::console_blue);
+		/*Geometry::Square square(50, 300, 100, 5, Geometry::Color::console_red);
+		square.info();
 
-	Geometry::Rectangle rect(300, 150, 300, 300, 5, Geometry::Color::blue);
-	rect.info();
-	cout << typeid(typeid(rect)).name() << endl;
-	
-	/*Geometry::Triangle treg(400, 150, 400, 5, Geometry::Color::green);
-	treg.info();
-	cout << typeid(typeid(treg)).name() << endl;*/
+		Geometry::Rectangle rect(300, 150, 300, 300, 5, Geometry::Color::blue);
+		rect.info();
+		cout << typeid(typeid(rect)).name() << endl;*/
 
-	//Geometry::Circle cir(300, 60, 300,60, Geometry::Color::yellow);
-	//cir.info();
-	//cout << typeid(typeid(cir)).name() << endl; 
+		/*Geometry::Triangle treg(400, 150, 400, 5, Geometry::Color::green);
+		treg.info();
+		cout << typeid(typeid(treg)).name() << endl;*/
 
+		Geometry::Circle cir(300, 60, 300,60, Geometry::Color::yellow);
+		cir.info();
+		cout << typeid(typeid(cir)).name() << endl; 
+
+		/*Geometry::Isosceles iso(50, 100, 120, 50, Geometry::Color::blue);
+		iso.info();*/
 }
