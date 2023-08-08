@@ -256,60 +256,6 @@ namespace Geometry
 	};
 }*/
 
-	class Circle :public Shape
-	{
-		double radius;
-
-	public:
-
-		Circle(double radius, SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS)
-		{
-			set_radius(radius);
-		}
-		~Circle() {}
-		double get_radius()const
-		{
-			return radius;
-		}
-		double set_radius()const
-		{
-			return radius;
-		}
-		void set_radius(double radius)
-		{
-			if (radius < 50)radius = 50;
-			if (radius > 200)radius = 200;
-			this->radius = radius;
-		}
-		double get_area()const override
-		{
-			return radius * radius * radius;
-		}
-		double get_perimeter()const override
-		{
-			return 2 * radius * radius;
-		}
-		void draw()const override
-		{
-			HWND hwnd = GetConsoleWindow();
-			HDC hdc = GetDC(hwnd);
-
-			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
-			HBRUSH hBrush = CreateSolidBrush(color);
-
-			SelectObject(hdc, hPen);
-			SelectObject(hdc, hBrush);
-
-			::Ellipse(hdc, start_x, start_y, start_x + 2 * radius, start_y + 2 * radius);
-
-			DeleteObject(hPen);
-			DeleteObject(hBrush);
-
-			ReleaseDC(hwnd, hdc);
-		}
-	};
-}
-
 //class Isosceles :public Shape
 //{
 //	double median;
@@ -366,6 +312,59 @@ namespace Geometry
 //		ReleaseDC(hwnd, hdc);
 //	}
 
+	class Circle :public Shape
+	{
+		double radius;
+
+	public:
+
+		Circle(double radius, SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS)
+		{
+			set_radius(radius);
+		}
+		~Circle() {}
+		double get_radius()const
+		{
+			return radius;
+		}
+		double set_radius()const
+		{
+			return radius;
+		}
+		void set_radius(double radius)
+		{
+			if (radius < 50)radius = 50;
+			if (radius > 200)radius = 200;
+			this->radius = radius;
+		}
+		double get_area()const override
+		{
+			return radius * radius * radius;
+		}
+		double get_perimeter()const override
+		{
+			return 2 * radius * radius;
+		}
+		void draw()const override
+		{
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+
+			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+
+			::Ellipse(hdc, start_x, start_y, start_x + 2 * radius, start_y + 2 * radius);
+
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+
+			ReleaseDC(hwnd, hdc);
+		}
+	};
+}
 
 	void main()
 {
@@ -382,10 +381,12 @@ namespace Geometry
 		treg.info();
 		cout << typeid(typeid(treg)).name() << endl;*/
 
+		/*Geometry::Isosceles iso(50, 100, 120, 50, Geometry::Color::blue);
+		iso.info();*/
+
 		Geometry::Circle cir(300, 60, 300,60, Geometry::Color::yellow);
 		cir.info();
 		cout << typeid(typeid(cir)).name() << endl; 
 
-		/*Geometry::Isosceles iso(50, 100, 120, 50, Geometry::Color::blue);
-		iso.info();*/
+		
 }
